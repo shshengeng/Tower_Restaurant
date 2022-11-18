@@ -143,7 +143,7 @@ public class Utility {
                 else continue;
             }
             if (str.length() < 1 || str.length() > limit){
-                System.out.print("input length cannot greater than" + limit +"）invalid input, please input again: ");
+                System.out.print("input length cannot greater than" + limit + " ）invalid input, please input again: ");
             }else {
                 return str;
             }

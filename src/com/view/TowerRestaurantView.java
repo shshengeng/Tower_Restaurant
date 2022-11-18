@@ -1,8 +1,11 @@
 package com.view;
 
 import com.domain.DiningTable;
+import com.domain.Dish;
 import com.domain.Employee;
+import com.service.BillService;
 import com.service.DiningTableService;
+import com.service.DishService;
 import com.service.EmployeeService;
 import com.utils.Utility;
 
@@ -14,6 +17,8 @@ public class TowerRestaurantView {
     private String key; //key
     private EmployeeService employeeService = new EmployeeService();//
     private DiningTableService diningTableService = new DiningTableService();//
+    private DishService dishService = new DishService();
+    private BillService billService = new BillService();
 
 
     public static void main(String[] args) throws Exception {
@@ -28,7 +33,7 @@ public class TowerRestaurantView {
             System.out.println("1 Log in");
             System.out.println("2 Exit");
             System.out.print("Please input your choice: ");
-            key = Utility.readString(1);
+            key = Utility.readString(2);
             switch (key){
                 case "1":
                     System.out.print("Please input your Employee ID: ");
@@ -59,8 +64,10 @@ public class TowerRestaurantView {
                                     reserveTable();
                                     break;
                                 case "3":
+                                    displayAllDishes();
                                     break;
                                 case "4":
+                                    orderDishes();
                                     break;
                                 case "5":
                                     break;
@@ -131,5 +138,59 @@ public class TowerRestaurantView {
         }else{
             System.out.println("==========Cancel Reservation==========\n");
         }
+    }
+
+    //display all dishes
+    public void displayAllDishes() throws Exception {
+        System.out.println("\nID \t\t Name \t\t\t\t Type \t\t Price");
+        List<Dish> dishList = dishService.getDishList();
+        for(Dish e: dishList){
+            System.out.println(e);
+        }
+        System.out.println();
+    }
+
+    //order dishes
+    public void orderDishes() throws Exception {
+        System.out.println("\n========Order dishes========");
+        System.out.print("Please input # dining table(-1 for exit): ");
+        int orderDiningTableId = Utility.readInt();
+        if(orderDiningTableId == -1){
+            System.out.println("========Cancel Order========\n");
+            return;
+        }
+        System.out.print("Please input # dish(-1 for exit): ");
+        int orderDishId = Utility.readInt();
+        if(orderDishId == -1){
+            System.out.println("========Cancel Order========\n");
+            return;
+        }
+        System.out.print("Please input amount of dishes(-1 for exit): ");
+        int orderNums = Utility.readInt();
+        if (orderNums == -1){
+            System.out.println("========Cancel Order========\n");
+            return;
+        }
+
+        //check if this table exist
+        DiningTable diningTable = diningTableService.getDiningTableById(orderDiningTableId);
+        if(diningTable == null){
+            System.out.println("This table is not exist\n");
+            return;
+        }
+        Dish dish = dishService.getDishById(orderDishId);
+        if(dish == null){
+            System.out.println("This dish is not exist\n");
+            return;
+        }
+
+        if(billService.orderDish(orderDishId, orderNums, orderDiningTableId)){
+            System.out.println("Order dish successfully!\n");
+        }else {
+            System.out.println("Failed to order dish!\n");
+        }
+
+
+
     }
 }

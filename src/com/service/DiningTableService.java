@@ -25,4 +25,10 @@ public class DiningTableService {
         return affectedRows > 0;
     }
 
+    public boolean updateDiningTable(int id, String state) throws Exception {
+        int update = diningTableDao.update("update diningTable set state = ? where id = ?", state, id);
+
+        return update > 0;
+    }
+
 }
