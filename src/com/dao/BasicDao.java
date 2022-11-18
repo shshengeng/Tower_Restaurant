@@ -12,17 +12,6 @@ public class BasicDao<T> {
 
     private QueryRunner queryRunner = new QueryRunner();
 
-    //DML
-    public int sqlDML(String sql, Object...parameters) throws Exception {
-
-        Connection connection = JdbcUtilsByDruid.getConnection();
-        int affectedRows = queryRunner.update(connection, sql, parameters);
-
-        JdbcUtilsByDruid.close(null, null, connection);
-
-        return affectedRows;
-    }
-
 
     /**
      *
@@ -69,5 +58,17 @@ public class BasicDao<T> {
         JdbcUtilsByDruid.close(null, null, connection);
 
         return ob;
+    }
+
+
+    //DMl sql
+    public int update(String sql, Object...parameters) throws Exception {
+
+        Connection connection = JdbcUtilsByDruid.getConnection();
+        int affectedRows = queryRunner.update(connection, sql, parameters);
+
+        JdbcUtilsByDruid.close(null, null, connection);
+
+        return affectedRows;
     }
 }
