@@ -1,7 +1,7 @@
 # Tower_Restaurant
 It simulates how a restaurant system works
 
-function:
+functions:
 
   Log in 
 
@@ -13,5 +13,5 @@ function:
   6 Bills out
   9 Exit main page
 
-Tool:
+Tools:
   JDBC(Mysql), Apache-dbutils, druid connection pool
