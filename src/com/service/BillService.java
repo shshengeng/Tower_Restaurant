@@ -1,7 +1,9 @@
 package com.service;
 
 import com.dao.BillDao;
+import com.domain.Bill;
 
+import java.util.List;
 import java.util.UUID;
 
 public class BillService {
@@ -26,4 +28,30 @@ public class BillService {
         return diningTableService.updateDiningTable(diningTable,"Eating");
     }
 
+    //return a list containing all bills
+    public List<Bill> displayAllBills() throws Exception {
+        return billDao.queryMultiple("select * from bill", Bill.class);
+    }
+
+    //to check do we have not paid bill by tableId
+    public boolean hasNotPaidBill(int tableId) throws Exception {
+        Bill bill = billDao.querySingle("select * from bill where diningTable = ? and state = 'Not paid'", Bill.class, tableId);
+
+        return bill != null;
+    }
+
+    public boolean payBill(int diningTable, String method) throws Exception {
+
+        //1.update bill table
+        int update = billDao.update("update bill set sate = ? where diningTable = ? and state = 'Not paid'", Bill.class, method, diningTable);
+        if(update <= 0){
+            return false;
+        }
+
+        //2.update diningTable table
+        if(!diningTableService.updateTableIntoEmpty(diningTable, "Empty")){
+            return false;
+        }
+        return true;
+    }
 }

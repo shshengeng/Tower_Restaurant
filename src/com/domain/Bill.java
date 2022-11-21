@@ -88,4 +88,15 @@ public class Bill {
     public void setState(String state) {
         this.state = state;
     }
+
+    @Override
+    public String toString() {
+        return id +
+                "\t\t\t" + dishId +
+                "\t\t\t" + nums +
+                "\t\t\t\t" + money +
+                "\t\t" + diningTable +
+                "\t\t" + billDate +
+                "\t\t\t\t" + state;
+    }
 }

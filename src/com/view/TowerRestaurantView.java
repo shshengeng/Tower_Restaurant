@@ -1,5 +1,6 @@
 package com.view;
 
+import com.domain.Bill;
 import com.domain.DiningTable;
 import com.domain.Dish;
 import com.domain.Employee;
@@ -70,8 +71,10 @@ public class TowerRestaurantView {
                                     orderDishes();
                                     break;
                                 case "5":
+                                    displayAllBills();
                                     break;
                                 case "6":
+                                    payBills();
                                     break;
                                 case "9":
                                     loop = false;
@@ -189,7 +192,53 @@ public class TowerRestaurantView {
         }else {
             System.out.println("Failed to order dish!\n");
         }
+    }
 
+    //display all bills
+    public void displayAllBills() throws Exception {
+        List<Bill> bills = billService.displayAllBills();
+        System.out.println("\nNumber\t\tDishId\t\tDishAmount\t\tMoney\t\tTableId\t\tDate\t\t\t\t\t\t\tStates");
+        for(Bill e : bills){
+            System.out.println(e);
+        }
+        System.out.println("=====Displays all bills done=====\n");
+    }
+
+    public void payBills() throws Exception {
+        System.out.println("\n=====Bills out=====");
+        System.out.print("Please input # table(-1 for exit): ");
+        int diningTableId = Utility.readInt();
+        if (diningTableId == -1){
+            System.out.println("======Cancel to check=====\n");
+            return;
+        }
+        //check if this table exist
+        DiningTable diningTable = diningTableService.getDiningTableById(diningTableId);
+        if(diningTable == null){
+            System.out.println("This table is not exist\n");
+            return;
+        }
+        if(!billService.hasNotPaidBill(diningTableId)){
+            System.out.println("This table has no bill to pay\n");
+            return;
+        }
+        System.out.print("Please input method(cash/credit): ");
+        String payMethod = Utility.readString(20, "");
+        if(payMethod.equals("")){
+            System.out.println("======Cancel to check=====\n");
+            return;
+        }
+        char c = Utility.readConfirmSelection();
+        if(c == 'Y'){
+            if(billService.payBill(diningTableId, payMethod)){
+                System.out.println("=====Pay the bill successfully=====\n");
+            }else {
+                System.out.println("======Failed to pay the bill=====\n");
+            }
+        }else {
+            System.out.println("======Cancel to check=====\n");
+        }
+        return;
 
 
     }

@@ -31,4 +31,9 @@ public class DiningTableService {
         return update > 0;
     }
 
+    public boolean updateTableIntoEmpty(int tableId, String state) throws Exception {
+        int update = diningTableDao.update("update diningTable set state = ?, orderName = ' ', orderTel = ' ' where id = ?", state, tableId);
+        return update > 0;
+    }
+
 }
